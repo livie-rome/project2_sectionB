@@ -31,7 +31,7 @@ void mkdir(char pathName[]){
 
     struct NODE* newDir = (struct NODE*)malloc(sizeof(struct NODE));
     strncpy(newDir->name, baseName, 63);
-    newDir->name[63] = '0\';
+    newDir->name[63] = '\0';
     newDir->fileType = 'D';
     newDir->childPtr = NULL;
     newDir->siblingPtr = NULL;
