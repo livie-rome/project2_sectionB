@@ -37,6 +37,11 @@ void mkdir(char pathName[]){
     newDir->siblingPtr = NULL;
     newDir->parentPtr = parent;
 
+    //check if newDir was allocated successfully
+    if (newDir == NULL) {
+    printf("MKDIR ERROR: Memory allocation failed\n");
+    return;
+    }
     if(parent->childPtr == NULL){
         parent->childPtr = newDir;
     } else{
