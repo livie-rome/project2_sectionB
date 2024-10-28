@@ -101,7 +101,7 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
         //slashes in path, separate into dirname and basename
         *lastSlash = '\0'; //temp terminates dirname
         if(pathName[0] == '/') {
-            strcoy(dirName, "/");
+            strcpy(dirName, "/");
             strcat(dirName, start);
         } else {
             strcpy(baseName, lastSlash +1);
@@ -127,7 +127,7 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
         struct NODE* child = current->childPtr;
 
         while (child != NULL){
-            if(child->fileType == 'D' && strcmp(child->name, toekn) == 0 ){
+            if(child->fileType == 'D' && strcmp(child->name, token) == 0 ){
                 next = child;
                 break;
             }
