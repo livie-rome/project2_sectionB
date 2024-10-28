@@ -29,9 +29,10 @@ void mkdir(char pathName[]){
 
     //creating new directory node
     struct NODE* newDir = (struct NODE*)malloc(sizeof(struct NODE));
+    //throws error if newDir isn't properly allocated
     if (newDir == NULL) {
-    printf("MKDIR ERROR: Memory allocation failed\n");
-    return;
+        printf("MKDIR ERROR: Memory allocation failed\n");
+        return;
     }
     
     strncpy(newDir->name, baseName, 63);
@@ -41,8 +42,6 @@ void mkdir(char pathName[]){
     newDir->siblingPtr = NULL;
     newDir->parentPtr = parent;
 
-    
-    
     //add as a child to the parent node and add relations to sibling node
     if(parent->childPtr == NULL){
         parent->childPtr = newDir;
@@ -90,24 +89,25 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
 
     //traverse directory path 
     struct NODE* current = (pathName[0] == '/') ? root : cwd;
-    char *start = (pathName[0] == '/') ? tempPath + 1: tempPath;
+    char* pathStart = (pathName[0] == '/') ? tempPath + 1 : tempPath;
 
     //split path and seperate directory and base name 
-    char *lastSlash = strrchr(start, '/');
+    char *lastSlash = strrchr(pathStart, '/');
     
     if (lastSlash != NULL) {
         //slashes in path, separate into dirname and basename
         *lastSlash = '\0'; //temp terminates dirname
         if(pathName[0] == '/') {
             strcpy(dirName, "/");
-            strcat(dirName, start);
+            strcat(dirName, pathStart);
         } else {
-            strcpy(baseName, lastSlash +1);
+            strcpy(dirName, pathStart);
         }
+        strcpy(baseName, lastSlash + 1);
     } else {
         //no slashes in the path
-        strcpy(baseName, start);
         strcpy(dirName, "");
+        strcpy(baseName, pathStart);
     }
 
     //if theres no file in the current directory return current
