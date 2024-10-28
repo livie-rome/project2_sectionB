@@ -6,7 +6,7 @@ extern struct NODE* cwd;
 //make directory
 void mkdir(char pathName[]){
     // handle an empty path
-    if (strcmp(pathName, "/") == 0){
+    if (strcmp(pathName, "/") == 0 || strcmp(pathName) == 0){
         printf("MKDIR ERROR: no path provided \n");
         return;
     }
@@ -21,7 +21,7 @@ void mkdir(char pathName[]){
     struct NODE* child = parent->childPtr;
     while (child != NULL){
         if (child->fileType == 'D' && strcmp(child->name, baseName) == 0) {
-            printf("MKDIR ERROR: director %s already exists \n", pathName);
+            printf("MKDIR ERROR: directory %s already exists \n", pathName);
             return;
         }
         child = child->siblingPtr;
@@ -29,6 +29,11 @@ void mkdir(char pathName[]){
 
     //creating new directory node
     struct NODE* newDir = (struct NODE*)malloc(sizeof(struct NODE));
+    if (newDir == NULL) {
+    printf("MKDIR ERROR: Memory allocation failed\n");
+    return;
+    }
+    
     strncpy(newDir->name, baseName, 63);
     newDir->name[63] = '\0';
     newDir->fileType = 'D';
@@ -36,14 +41,7 @@ void mkdir(char pathName[]){
     newDir->siblingPtr = NULL;
     newDir->parentPtr = parent;
 
-    /*
-    debating if this needs to be in here or not
-    //check if newDir was allocated successfully
-    if (newDir == NULL) {
-    printf("MKDIR ERROR: Memory allocation failed\n");
-    return;
-    }
-    */
+    
     
     //add as a child to the parent node and add relations to sibling node
     if(parent->childPtr == NULL){
