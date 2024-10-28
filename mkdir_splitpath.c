@@ -68,7 +68,7 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
 
     // YOUR CODE HERE
     //handles empty path
-    if(strcmp(pathName, "/") == 0) {
+    if(strlen(pathName) == 0) {
         strcpy(dirName, ""); 
         strcpy(baseName, "");
         //returns to the current working directory since there is no other information
