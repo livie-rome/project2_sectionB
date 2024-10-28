@@ -6,7 +6,7 @@ extern struct NODE* cwd;
 //make directory
 void mkdir(char pathName[]){
     // handle an empty path
-    if (strcmp(pathName, "/") == 0 || strcmp(pathName) == 0){
+    if (strcmp(pathName, "/") == 0 || strcmp(pathName, "") == 0){
         printf("MKDIR ERROR: no path provided \n");
         return;
     }
