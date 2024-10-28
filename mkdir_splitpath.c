@@ -122,6 +122,7 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
     char* token = strtok(dirCopy, "/");
     if(pathName[0] == '/') {
         token = strtok(NULL, "/"); //skips empty token for absolute paths
+    }
     while (token != NULL) {
         struct NODE* next = NULL;
         struct NODE* child = current->childPtr;
