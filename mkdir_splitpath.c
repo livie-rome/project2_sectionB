@@ -10,6 +10,7 @@ void mkdir(char pathName[]){
         printf("MKDIR ERROR: no path provided \n");
         return;
     }
+    
     char baseName[64];
     char dirName [128];
 
@@ -20,21 +21,25 @@ void mkdir(char pathName[]){
 
     struct NODE* child = parent->childPtr;
     while (child != NULL){
+        //throw error if the directory already exists
         if (child->fileType == 'D' && strcmp(child->name, baseName) == 0) {
             printf("MKDIR ERROR: directory %s already exists \n", pathName);
             return;
         }
+        //move onto a sibling
         child = child->siblingPtr;
     }
 
     //creating new directory node
     struct NODE* newDir = (struct NODE*)malloc(sizeof(struct NODE));
+    
     //throws error if newDir isn't properly allocated
     if (newDir == NULL) {
         printf("MKDIR ERROR: Memory allocation failed\n");
         return;
     }
     
+    //initiating values in newDir
     strncpy(newDir->name, baseName, 63);
     newDir->name[63] = '\0';
     newDir->fileType = 'D';
@@ -53,7 +58,6 @@ void mkdir(char pathName[]){
         child->siblingPtr = newDir;
     }
     
-
     printf("MKDIR SUCCESS: node %s successfully created \n", pathName);
 }
 
@@ -82,7 +86,7 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
         return root;
     }
 
-    //copy pathName to avoind modifying the original string
+    //copy pathName to avoid modifying the original string
     char tempPath[128];
     strcpy(tempPath, pathName);
     tempPath[127] = '\0';
@@ -96,7 +100,7 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
     
     if (lastSlash != NULL) {
         //slashes in path, separate into dirname and basename
-        *lastSlash = '\0'; //temp terminates dirname
+        *lastSlash = '\0'; 
         if(pathName[0] == '/') {
             strcpy(dirName, "/");
             strcat(dirName, pathStart);
@@ -118,22 +122,31 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
     char dirCopy[128]; 
     strcpy(dirCopy, dirName);
     char* token = strtok(dirCopy, "/");
+    
     if(pathName[0] == '/') {
-        token = strtok(NULL, "/"); //skips empty token for absolute paths
+        //skips empty token for absolute paths
+        token = strtok(NULL, "/"); 
     }
+
+    //iterate through each token in path
     while (token != NULL) {
         struct NODE* next = NULL;
         struct NODE* child = current->childPtr;
-
+        
+        //traverse the linked list of children
         while (child != NULL){
             if(child->fileType == 'D' && strcmp(child->name, token) == 0 ){
-                next = child;
-                break;
+                //if theres a match, set the node next as child
+                next = child; 
+                //break the while loop
+                break; 
             }
-            child = child->siblingPtr;
+            child = child->siblingPtr; //move to next symbol
         }
+        
         /*
         this didnt want to work for me, so switched to while loop
+        struct NODE* next = NULL;
         for(struct NODE* child = current->childPtr; child != NULL; child = child->siblingPtr) {
             if(strcmp(child->name, token) == 0 && child->fileType == 'D') {
                 next = child;
@@ -141,13 +154,17 @@ struct NODE* splitPath(char* pathName, char* baseName, char* dirName){
             }
         }
         */
-        //if directory is not found, return an error
+        
+        //if no mathcing directory is found, return an error
         if(next == NULL) {
             printf("ERROR: directory %s does not exist \n", token);
             return NULL;
         }
+        //set current to the found directory node
         current = next;
+        //get the next token from the path
         token = strtok(NULL, "/");
     }
+    //returns the path to be used by mkDir
     return current;
 }
